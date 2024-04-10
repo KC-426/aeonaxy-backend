@@ -66,7 +66,7 @@ const userSignup = async (req, res) => {
 
     res
       .status(201)
-      .json({success: true, message: "User created successfully!", result, mail });
+      .json({success: true, message: "User created successfully!", userId: result._id, result, mail });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal Server Error" });
@@ -106,7 +106,7 @@ const userLogin = async (req, res) => {
 };
 
 const userProfile = async (req, res, next) => {
-  const { id } = req.params;
+  const { userId } = req.params;
   try {
     const { location } = req.body;
     const imageFile = req.file;
@@ -119,11 +119,11 @@ const userProfile = async (req, res, next) => {
 
     const result = await cloudinary.uploader.upload(imageFile.path, {
       folder: "user_images",
-      public_id: `user_${id}`,
+      public_id: `user_${userId}`,
     });
 
     const updatedUser = await userSchema.findByIdAndUpdate(
-      id,
+      userId,
       { location, imageFile: result.secure_url },
       { new: true }
     );
@@ -132,10 +132,11 @@ const userProfile = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "User profile updated", user: updatedUser });
+    console.log(updatedUser)
+    res.status(200).json({ success: true, message: "User profile updated", user: updatedUser });
 
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };

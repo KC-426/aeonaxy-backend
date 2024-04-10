@@ -18,6 +18,6 @@ const router = express.Router()
 
 router.post('/user/signup', userController.userSignup)
 router.get('/user/login', userController.userLogin)
-router.put('/user/profile/:id', upload.single('file'), userController.userProfile)
+router.put('/user/profile/:userId', upload.single('file'), userController.userProfile)
 
 module.exports = router
