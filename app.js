@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose')
-const path = require('path')
 const cors = require('cors')
 require("dotenv").config();
 
@@ -23,13 +22,6 @@ const userRoutes = require("./routes/user");
 app.use(bodyParser.json());
 
 app.use(userRoutes);
-
-
-app.use(express.static(path.join(__dirname, 'build')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
 
 app.use("/", (req, res) => {
   console.log("Working ");
